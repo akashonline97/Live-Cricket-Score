@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React , {useEffect,useState} from 'react'
+import "./App.css"
+import {Button, Container, Grid} from "@material-ui/core"
+import MyCard from './components/MyCard'
+import Navbar from './components/Navbar'
+import {getMatches} from './api/api'
+function App(){
 
-function App() {
+  const [matches,setMatches] = useState([])
+
+  useEffect(() => {
+    getMatches()
+    .then((data)=> {console.log(data); setMatches(data.matches)})
+    .catch((error)=>alert("Could not load",error));
+    
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      
+      <Navbar/>
+    
+      <h1>Welcome to CrickLive Score</h1>
+      
+      <Container>
+        <Grid container>
+          <Grid sm="2"></Grid>
+          <Grid sm="8" >
+            {
+              matches.map((match)=>(
+                
+              <MyCard key={match.unique_id} match ={match}/>
+              
+              
+              ))
+        
+            }
+            
+      <Button variant="outlined" color="primary"></Button>
+      </Grid>
+      </Grid>
+      </Container>
     </div>
-  );
+  )
 }
-
-export default App;
+export default App
